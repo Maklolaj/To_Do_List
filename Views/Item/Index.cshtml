@@ -1,0 +1,82 @@
+﻿@model IEnumerable<NET5_test.Models.Item>;
+
+<div class="containerp-3">
+    <div class="row pt-4">
+
+        <div class="col-6">
+            <h2 class="text-primary">Borrowed Items List</h2>
+        </div>
+
+
+
+    </div>
+
+    <br />
+
+    @if (Model.Count() > 0)
+    {
+        <table class="table table-bordered table-striped" style="width:100%">
+            <thead>
+                <tr>
+                    <th>
+                        Item Name
+                    </th>
+
+                    <th>
+                        Borrower
+                    </th>
+
+                    <th>
+                        Lender
+                    </th>
+
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var a in Model)
+                {
+                <tr>
+                    <td width="25%">@a.ItemName</td>
+
+                    <td width="25">@a.Borrower</td>
+
+                    <td width="25%">@a.Lender</td>
+
+                    <td width="25%">
+                        <a asp-action="Edit" asp-route-id="@a.id">Edit</a>
+                        <a asp-action="IDetails" asp-route-id="@a.id">Details</a>
+                    </td>
+                </tr>
+                }
+
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>No items created yet</p>
+    }
+
+</div>
+
+
+<div class="container">
+    <div class="row">
+
+        <div class="col-4">
+            <a class="btn btn-primary" asp-controller="Item" asp-action="Create">Create a new Item</a>
+        </div>
+
+        <div class="col-4">
+            <a class="btn btn-primary" asp-controller="Item" asp-action="IFind">Find an Item</a>
+        </div>
+
+        <div class="col-4">
+            <a class="btn btn-primary" asp-controller="Home" asp-action="Index">Go to home page</a>
+        </div>
+
+
+
+    </div>
+</div>
