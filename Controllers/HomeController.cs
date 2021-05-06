@@ -31,14 +31,20 @@ namespace NET5_test.Controllers
         {
             return View();
         }
+        
+        [HttpGet("denied")]
+        public IActionResult Denied()
+        {
+            return View();       
+        }
 
-        [Authorize]
+        [Authorize(Roles ="Admin")]
         public IActionResult Secured()
         {
             return View();
         }
 
-        [HttpGet("login")]
+        [HttpGet("login")] 
         public IActionResult Login(string returnUrl)
         {
             ViewData["ReturnUrl"] = returnUrl;
@@ -48,19 +54,31 @@ namespace NET5_test.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login(string username, string password, string returnUrl)
         {
-            Console.WriteLine("przed ifem");
+            ViewData["ReturnUrl"] = returnUrl;
+            //Console.WriteLine("przed ifem");
             if (username == "mikolaj" && password == "admin")
             {
                 var claims = new List<Claim>();
                 claims.Add(new Claim("username", username));
                 claims.Add(new Claim(ClaimTypes.NameIdentifier, username));
+                claims.Add(new Claim(ClaimTypes.Name, "Mikolaj Zelek"));
+                claims.Add(new Claim(ClaimTypes.Role, "Admin"));
                 var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                 var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
                 await HttpContext.SignInAsync(claimsPrincipal);
                 //Console.WriteLine("przed OK");
                 return Redirect(returnUrl);
             }
-            return BadRequest("Noob");        
+            TempData["Error"] = "Username or Password is invalid";
+            //return View("login");
+            return View("login");
+        }
+
+        [Authorize]
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync();
+            return Redirect("/");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

@@ -30,6 +30,13 @@
                         <li>
                             <a class="nav-link text-dark" asp-controller="Home" asp-action="Secured"> Login </a>
                         </li>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <li>
+                                <a class="nav-link text-dark" asp-controller="Home" asp-action="Logout"> Logout </a>
+                            </li>
+                        }
+
 
                     </ul>
                 </div>
